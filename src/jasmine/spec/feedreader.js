@@ -136,11 +136,42 @@ $(function() {
             expect(entry.length).not.toBe(0);
         });
     });
-    
-    /* TODO: Write a new test suite named "New Feed Selection"
 
-        /* TODO: Write a test that ensures when a new feed is loaded
+    /* New Feed Selection test suite */
+    describe('New feed selection', function() {
+
+        var feed;
+
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                done();
+            });
+        });
+
+        /* Test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+        it('loads a new feed and content updates.', function(done) {
+            var oldEntry;
+            feed = $('.feed');
+            oldEntry = feed.find(".entry");
+            expect(oldEntry).toBeDefined();
+            expect(oldEntry).not.toBeNull();
+            expect(oldEntry.length).not.toBe(0);
+
+            loadFeed(1, function() {
+                var newEntry;
+                feed = $('.feed');
+                newEntry = feed.find(".entry");
+                expect(newEntry).toBeDefined();
+                expect(newEntry).not.toBeNull();
+                expect(newEntry.length).not.toBe(0);
+                console.log(oldEntry.first("h2").text());
+                console.log(newEntry.first("h2").text());
+                expect(oldEntry.first("h2").text()).not.toBe(newEntry.first("h2").text());
+                done();
+            });
+        });
+    });
 }());

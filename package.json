@@ -1,0 +1,25 @@
+{
+  "name": "frontend-nanodegree-feedreader",
+  "version": "1.0.0",
+  "description": "Frontend Nanodegree Project 6 Feedreader Testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tsakauchi/frontend-nanodegree-feedreader.git"
+  },
+  "author": "Tsuginosuke Sakauchi <dev@fairlandcircle.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tsakauchi/frontend-nanodegree-feedreader/issues"
+  },
+  "homepage": "https://github.com/tsakauchi/frontend-nanodegree-feedreader#readme",
+  "devDependencies": {
+    "bower": "^1.7.7",
+    "grunt": "^0.4.5",
+    "grunt-bowercopy": "^1.2.4",
+    "load-grunt-tasks": "^3.4.1"
+  }
+}

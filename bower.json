@@ -1,0 +1,24 @@
+{
+  "name": "frontend-nanodegree-feedreader",
+  "description": "Frontend Nanodegree Project 6 Feedreader Testing",
+  "main": "index.js",
+  "authors": [
+    "Tsuginosuke Sakauchi <dev@fairlandcircle.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/tsakauchi/frontend-nanodegree-feedreader",
+  "moduleType": [
+    "amd"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jasmine-jquery": "^2.1.1"
+  }
+}

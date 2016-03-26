@@ -13,6 +13,12 @@ $(function() {
     * a related set of tests. This suite is all about the RSS
     * feeds definitions, the allFeeds variable in our application.
     */
+    function validateCollectionNotEmpty(collection) {
+        expect(collection).toBeDefined();
+        expect(collection).not.toBeNull();
+        expect(collection.length).not.toBe(0);
+    }
+
     describe('RSS Feeds', function() {
         /* This is our first test - it tests to make sure that the
          * allFeeds variable has been defined and that it is not
@@ -33,9 +39,7 @@ $(function() {
          */
         it('have URL defined', function() {
             allFeeds.forEach(function(feed) {
-                expect(feed.url).toBeDefined();
-                expect(feed.url).not.toBeNull();
-                expect(feed.url.length).not.toBe(0);
+                validateCollectionNotEmpty(feed.url);
             });
         });
 
@@ -46,9 +50,7 @@ $(function() {
          */
         it('have name defined', function() {
             allFeeds.forEach(function(feed) {
-                expect(feed.name).toBeDefined();
-                expect(feed.name).not.toBeNull();
-                expect(feed.name.length).not.toBe(0);
+                validateCollectionNotEmpty(feed.name);
             });
         });
     });
@@ -114,7 +116,7 @@ $(function() {
     /* Initial entries test suite */
     describe('Initial entries', function() {
 
-        var feed, entry;
+        var feed = $('.feed');
 
         beforeEach(function(done) {
             loadFeed(0, function() {
@@ -128,19 +130,16 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
-        it('has at least a single .entry element within the .feed container.', function() {
-            feed = $('.feed');
-            entry = feed.find(".entry");
-            expect(entry).toBeDefined();
-            expect(entry).not.toBeNull();
-            expect(entry.length).not.toBe(0);
+        it('has at least a single .entry element within the .feed container', function() {
+            var entry = feed.find(".entry");
+            validateCollectionNotEmpty(entry);
         });
     });
 
     /* New Feed Selection test suite */
     describe('New feed selection', function() {
 
-        var feed;
+        var feed = $('.feed');
 
         beforeEach(function(done) {
             loadFeed(0, function() {
@@ -152,23 +151,13 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
-        it('loads a new feed and content updates.', function(done) {
-            var oldEntry;
-            feed = $('.feed');
-            oldEntry = feed.find(".entry");
-            expect(oldEntry).toBeDefined();
-            expect(oldEntry).not.toBeNull();
-            expect(oldEntry.length).not.toBe(0);
+        it('loads a new feed and content updates', function(done) {
+            var oldEntry = feed.find(".entry");
+            validateCollectionNotEmpty(oldEntry);
 
             loadFeed(1, function() {
-                var newEntry;
-                feed = $('.feed');
-                newEntry = feed.find(".entry");
-                expect(newEntry).toBeDefined();
-                expect(newEntry).not.toBeNull();
-                expect(newEntry.length).not.toBe(0);
-                console.log(oldEntry.first("h2").text());
-                console.log(newEntry.first("h2").text());
+                var newEntry = feed.find(".entry");
+                validateCollectionNotEmpty(newEntry);
                 expect(oldEntry.first("h2").text()).not.toBe(newEntry.first("h2").text());
                 done();
             });

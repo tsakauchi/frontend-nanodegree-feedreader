@@ -58,8 +58,20 @@ $(function() {
     describe('The Menu', function() {
 
         var body = $('body');
+        var menu = $('.slide-menu');
         var menuIcon = $('.menu-icon-link');
         var menuHidden = "menu-hidden";
+        var transitionEndEvents = "webkitTransitionEnd mozTransitionEnd oTransitionEnd otransitionend transitionend";
+
+        function testIfMenuHidden() {
+            expect(body).toHaveClass(menuHidden);
+            expect(menu.offset().left).toBeLessThan(0);
+        }
+
+        function testIfMenuVisible() {
+            expect(body).not.toHaveClass(menuHidden);
+            expect(menu.offset().left).not.toBeLessThan(0);
+        }
 
         /* Test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
@@ -67,7 +79,7 @@ $(function() {
          * hiding/showing of the menu element.
          */
         it('is hidden by default', function() {
-            expect(body).toHaveClass(menuHidden);
+            testIfMenuHidden();
         });
 
          /* Test that ensures the menu changes
@@ -75,13 +87,28 @@ $(function() {
           * should have two expectations: does the menu display when
           * clicked and does it hide when clicked again.
           */
-        it('changes visibility when the menu icon is clicked', function() {
-            expect(body).toHaveClass(menuHidden);
+        it('is shown when the menu icon is clicked when the menu is hidden', function(done) {
+            if (! body.hasClass(menuHidden)) body.addClass(menuHidden);
+            testIfMenuHidden();
+            menu.on(transitionEndEvents, function() {
+                menu.off(transitionEndEvents);
+                testIfMenuVisible();
+                done();
+            });
             menuIcon.click();
-            expect(body).not.toHaveClass(menuHidden);
-            menuIcon.click();
-            expect(body).toHaveClass(menuHidden);
         });
+
+        it('is hidden when the menu icon is clicked when the menu is visible', function(done) {
+            if (body.hasClass(menuHidden)) body.removeClass(menuHidden);
+            testIfMenuVisible();
+            menu.on(transitionEndEvents, function() {
+                menu.off(transitionEndEvents);
+                testIfMenuHidden();
+                done();
+            });
+            menuIcon.click();
+        });
+
     });
 
     /* TODO: Write a new test suite named "Initial Entries" */

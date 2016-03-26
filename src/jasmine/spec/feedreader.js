@@ -201,5 +201,46 @@ $(function() {
                 done();
             });
         });
+
+        /* [Extra Test] Test that ensures when a new feed is loaded
+         * when the menu item is selected. Verify that the page heading
+         * is updated and the menu is closed.
+         */
+        it('loads a new feed and page heading updates and menu closes', function(done) {
+            var oldHeading = $('.header-title').text();
+
+            // called once the loadFeed is triggered
+            var onFeedLoaded = function(done) {
+                return function() {
+                    var newHeading = $('.header-title').text();
+                    expect(newHeading).not.toBe(oldHeading);
+                    done();
+                }
+            };
+
+            // called once the menu is hidden
+            var onMenuHidden = function(done,id) {
+                return function() {
+                    loadFeed(id, onFeedLoaded(done));
+                }
+            };
+
+            // called once the menu is visible
+            var onMenuVisible = function(done) {
+                return function() {
+                    var lastFeed = $('.feed-list').children().last().find("a");
+                    var lastFeedId = lastFeed.attr('data-id');
+                    menu.on(transitionEndEvents, testIfMenuHiddenAfterTransition(onMenuHidden(done,lastFeedId)));
+                    lastFeed.click();
+                };
+            };
+
+            if (isMenuHidden()) {
+                menu.on(transitionEndEvents, testIfMenuVisibleAfterTransition(onMenuVisible(done)));
+                showMenu();
+            } else {
+                testIfMenuVisibleAfterTransition(onMenuVisible(done))();
+            }
+        });
     });
 }());

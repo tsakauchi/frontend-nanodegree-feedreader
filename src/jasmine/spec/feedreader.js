@@ -12,10 +12,10 @@ $(function() {
 
     /* Common variables and functions
      */
-    var body = $('body');
-    var menu = $('.slide-menu');
+    var body = $("body");
+    var menu = $(".slide-menu");
     var menuHidden = "menu-hidden";
-    var menuIcon = $('.menu-icon-link');
+    var menuIcon = $(".menu-icon-link");
     var transitionEndEvents = "webkitTransitionEnd mozTransitionEnd oTransitionEnd otransitionend transitionend";
 
     function testIfMenuHidden() {
@@ -82,7 +82,7 @@ $(function() {
      * a related set of tests. This suite is all about the RSS
      * feeds definitions, the allFeeds variable in our application.
      */
-    describe('RSS Feeds', function() {
+    describe("RSS Feeds", function() {
         /* This is our first test - it tests to make sure that the
          * allFeeds variable has been defined and that it is not
          * empty. Experiment with this before you get started on
@@ -90,7 +90,7 @@ $(function() {
          * allFeeds in app.js to be an empty array and refresh the
          * page?
          */
-        it('are defined', function() {
+        it("are defined", function() {
             expect(allFeeds).toBeDefined();
             expect(allFeeds.length).toBeGreaterThan(0);
         });
@@ -100,7 +100,7 @@ $(function() {
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
-        it('have URL defined', function() {
+        it("have URL defined", function() {
             allFeeds.forEach(function(feed) {
                 validateCollectionNotEmpty(feed.url);
             });
@@ -111,7 +111,7 @@ $(function() {
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
-        it('have name defined', function() {
+        it("have name defined", function() {
             allFeeds.forEach(function(feed) {
                 validateCollectionNotEmpty(feed.name);
             });
@@ -121,8 +121,8 @@ $(function() {
          * in the allFeeds object and ensures it has a corresponding
          * entry in the feed list in order.
          */
-        it('are listed in the menu in the correct order', function() {
-            var feedList = $('.feed-list a');
+        it("are listed in the menu in the correct order", function() {
+            var feedList = $(".feed-list a");
             for (var i = 0; i < allFeeds.length; i++) {
               expect(allFeeds[i].name).toBe(feedList[i].text);
             }
@@ -132,14 +132,14 @@ $(function() {
 
 
     /* The menu test suite */
-    describe('The Menu', function() {
+    describe("The Menu", function() {
 
         /* Test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
          * the CSS to determine how we're performing the
          * hiding/showing of the menu element.
          */
-        it('is hidden by default', function() {
+        it("is hidden by default", function() {
             testIfMenuHidden();
         });
 
@@ -148,7 +148,7 @@ $(function() {
           * should have two expectations: does the menu display when
           * clicked and does it hide when clicked again.
           */
-        it('is shown when the menu icon is clicked when the menu is hidden', function(done) {
+        it("is shown when the menu icon is clicked when the menu is hidden", function(done) {
             if (isMenuHidden()) {
                 testIfMenuVisibleAfterMenuIconClick(done)();
             } else {
@@ -157,7 +157,7 @@ $(function() {
             }
         });
 
-        it('is hidden when the menu icon is clicked when the menu is visible', function(done) {
+        it("is hidden when the menu icon is clicked when the menu is visible", function(done) {
             if (isMenuHidden()) {
                 menu.on(transitionEndEvents, testIfMenuHiddenAfterMenuIconClick(done));
                 showMenu();
@@ -169,9 +169,9 @@ $(function() {
     });
 
     /* Initial entries test suite */
-    describe('Initial entries', function() {
+    describe("Initial entries", function() {
 
-        var feed = $('.feed');
+        var feed = $(".feed");
 
         beforeEach(function(done) {
             loadFeed(0, done);
@@ -183,16 +183,16 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
-        it('has at least a single .entry element within the .feed container', function() {
+        it("has at least a single .entry element within the .feed container", function() {
             var entry = feed.find(".entry");
             validateCollectionNotEmpty(entry);
         });
     });
 
     /* New Feed Selection test suite */
-    describe('New feed selection', function() {
+    describe("New feed selection", function() {
 
-        var feed = $('.feed');
+        var feed = $(".feed");
 
         beforeEach(function(done) {
             loadFeed(0, done);
@@ -202,7 +202,7 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
-        it('loads a new feed and content updates', function(done) {
+        it("loads a new feed and content updates", function(done) {
             var oldEntry = feed.find(".entry");
             validateCollectionNotEmpty(oldEntry);
 
@@ -218,13 +218,13 @@ $(function() {
          * when the menu item is selected. Verify that the page heading
          * is updated and the menu is closed.
          */
-        it('loads a new feed and page heading updates and menu closes', function(done) {
-            var oldHeading = $('.header-title').text();
+        it("loads a new feed and page heading updates and menu closes", function(done) {
+            var oldHeading = $(".header-title").text();
 
             // called once the loadFeed is triggered
             var onFeedLoaded = function(done) {
                 return function() {
-                    var newHeading = $('.header-title').text();
+                    var newHeading = $(".header-title").text();
                     expect(newHeading).not.toBe(oldHeading);
                     done();
                 }
@@ -240,8 +240,8 @@ $(function() {
             // called once the menu is visible
             var onMenuVisible = function(done) {
                 return function() {
-                    var lastFeed = $('.feed-list').children().last().find("a");
-                    var lastFeedId = lastFeed.attr('data-id');
+                    var lastFeed = $(".feed-list").children().last().find("a");
+                    var lastFeedId = lastFeed.attr("data-id");
                     menu.on(transitionEndEvents, testIfMenuHiddenAfterTransition(onMenuHidden(done,lastFeedId)));
                     lastFeed.click();
                 };

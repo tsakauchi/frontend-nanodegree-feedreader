@@ -116,6 +116,18 @@ $(function() {
                 validateCollectionNotEmpty(feed.name);
             });
         });
+
+        /* [Extra Test] Test that loops through each feed
+         * in the allFeeds object and ensures it has a corresponding
+         * entry in the feed list in order.
+         */
+        it('are listed in the menu in the correct order', function() {
+            var feedList = $('.feed-list a');
+            for (var i = 0; i < allFeeds.length; i++) {
+              expect(allFeeds[i].name).toBe(feedList[i].text);
+            }
+        });
+
     });
 
 

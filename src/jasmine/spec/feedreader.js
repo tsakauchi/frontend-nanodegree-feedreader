@@ -9,16 +9,79 @@
  * to ensure they don't run until the DOM is ready.
  */
 $(function() {
-    /* This is our first test suite - a test suite just contains
-    * a related set of tests. This suite is all about the RSS
-    * feeds definitions, the allFeeds variable in our application.
-    */
+
+    /* Common variables and functions
+     */
+    var body = $('body');
+    var menu = $('.slide-menu');
+    var menuHidden = "menu-hidden";
+    var menuIcon = $('.menu-icon-link');
+    var transitionEndEvents = "webkitTransitionEnd mozTransitionEnd oTransitionEnd otransitionend transitionend";
+
+    function testIfMenuHidden() {
+        expect(body).toHaveClass(menuHidden);
+        expect(menu.offset().left).toBeLessThan(0);
+    }
+
+    function testIfMenuVisible() {
+        expect(body).not.toHaveClass(menuHidden);
+        expect(menu.offset().left).not.toBeLessThan(0);
+    }
+
+    function testIfMenuHiddenAfterTransition(done) {
+        return function() {
+            menu.off(transitionEndEvents);
+            testIfMenuHidden();
+            done();
+        };
+    }
+
+    function testIfMenuVisibleAfterTransition(done) {
+        return function() {
+            menu.off(transitionEndEvents);
+            testIfMenuVisible();
+            done();
+        };
+    }
+
+    function testIfMenuHiddenAfterMenuIconClick(done) {
+        return function() {
+            menu.off(transitionEndEvents);
+            menu.on(transitionEndEvents, testIfMenuHiddenAfterTransition(done));
+            menuIcon.click();
+        };
+    }
+
+    function testIfMenuVisibleAfterMenuIconClick(done) {
+        return function() {
+            menu.off(transitionEndEvents);
+            menu.on(transitionEndEvents, testIfMenuVisibleAfterTransition(done));
+            menuIcon.click();
+        };
+    }
+
     function validateCollectionNotEmpty(collection) {
         expect(collection).toBeDefined();
         expect(collection).not.toBeNull();
-        expect(collection.length).not.toBe(0);
+        expect(collection.length).toBeGreaterThan(0);
     }
 
+    function isMenuHidden() {
+      return body.hasClass(menuHidden);
+    }
+
+    function hideMenu() {
+      body.addClass(menuHidden);
+    }
+
+    function showMenu() {
+      body.removeClass(menuHidden);
+    }
+
+    /* This is our first test suite - a test suite just contains
+     * a related set of tests. This suite is all about the RSS
+     * feeds definitions, the allFeeds variable in our application.
+     */
     describe('RSS Feeds', function() {
         /* This is our first test - it tests to make sure that the
          * allFeeds variable has been defined and that it is not
@@ -29,7 +92,7 @@ $(function() {
          */
         it('are defined', function() {
             expect(allFeeds).toBeDefined();
-            expect(allFeeds.length).not.toBe(0);
+            expect(allFeeds.length).toBeGreaterThan(0);
         });
 
 
@@ -59,22 +122,6 @@ $(function() {
     /* The menu test suite */
     describe('The Menu', function() {
 
-        var body = $('body');
-        var menu = $('.slide-menu');
-        var menuIcon = $('.menu-icon-link');
-        var menuHidden = "menu-hidden";
-        var transitionEndEvents = "webkitTransitionEnd mozTransitionEnd oTransitionEnd otransitionend transitionend";
-
-        function testIfMenuHidden() {
-            expect(body).toHaveClass(menuHidden);
-            expect(menu.offset().left).toBeLessThan(0);
-        }
-
-        function testIfMenuVisible() {
-            expect(body).not.toHaveClass(menuHidden);
-            expect(menu.offset().left).not.toBeLessThan(0);
-        }
-
         /* Test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
          * the CSS to determine how we're performing the
@@ -90,25 +137,21 @@ $(function() {
           * clicked and does it hide when clicked again.
           */
         it('is shown when the menu icon is clicked when the menu is hidden', function(done) {
-            if (! body.hasClass(menuHidden)) body.addClass(menuHidden);
-            testIfMenuHidden();
-            menu.on(transitionEndEvents, function() {
-                menu.off(transitionEndEvents);
-                testIfMenuVisible();
-                done();
-            });
-            menuIcon.click();
+            if (isMenuHidden()) {
+                testIfMenuVisibleAfterMenuIconClick(done)();
+            } else {
+                menu.on(transitionEndEvents, testIfMenuVisibleAfterMenuIconClick(done));
+                hideMenu();
+            }
         });
 
         it('is hidden when the menu icon is clicked when the menu is visible', function(done) {
-            if (body.hasClass(menuHidden)) body.removeClass(menuHidden);
-            testIfMenuVisible();
-            menu.on(transitionEndEvents, function() {
-                menu.off(transitionEndEvents);
-                testIfMenuHidden();
-                done();
-            });
-            menuIcon.click();
+            if (isMenuHidden()) {
+                menu.on(transitionEndEvents, testIfMenuHiddenAfterMenuIconClick(done));
+                showMenu();
+            } else {
+                testIfMenuHiddenAfterMenuIconClick(done)();
+            }
         });
 
     });
@@ -119,9 +162,7 @@ $(function() {
         var feed = $('.feed');
 
         beforeEach(function(done) {
-            loadFeed(0, function() {
-                done();
-            });
+            loadFeed(0, done);
         });
 
         /* Test that ensures when the loadFeed
@@ -142,9 +183,7 @@ $(function() {
         var feed = $('.feed');
 
         beforeEach(function(done) {
-            loadFeed(0, function() {
-                done();
-            });
+            loadFeed(0, done);
         });
 
         /* Test that ensures when a new feed is loaded

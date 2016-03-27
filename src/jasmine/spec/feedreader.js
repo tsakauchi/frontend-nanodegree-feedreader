@@ -28,6 +28,9 @@ $(function() {
         expect(menu.offset().left).not.toBeLessThan(0);
     }
 
+    /* async callback function to be called
+     * once the menu hide transition is finished
+     */
     function testIfMenuHiddenAfterTransition(done) {
         return function() {
             menu.off(transitionEndEvents);
@@ -36,6 +39,9 @@ $(function() {
         };
     }
 
+    /* async callback function to be called
+     * once the menu show transition is finished
+     */
     function testIfMenuVisibleAfterTransition(done) {
         return function() {
             menu.off(transitionEndEvents);
@@ -44,6 +50,11 @@ $(function() {
         };
     }
 
+    /* async callback function to be called 
+     * to test if menu will hide after clicking on the menu icon.
+     * (this function nests another async call so that the actual test
+     * will run AFTER the transition animation is finished.)
+     */
     function testIfMenuHiddenAfterMenuIconClick(done) {
         return function() {
             menu.off(transitionEndEvents);
@@ -52,6 +63,11 @@ $(function() {
         };
     }
 
+    /* async callback function to be called 
+     * to test if menu will show after clicking on the menu icon.
+     * (this function nests another async call so that the actual test
+     * will run AFTER the transition animation is finished.)
+     */
     function testIfMenuVisibleAfterMenuIconClick(done) {
         return function() {
             menu.off(transitionEndEvents);
@@ -60,6 +76,12 @@ $(function() {
         };
     }
 
+    /* test to check if the collection object (strings, arrays)
+     * is...
+     *  1. defined
+     *  2. not null
+     *  3. not empty (length greater than 0)
+     */
     function validateCollectionNotEmpty(collection) {
         expect(collection).toBeDefined();
         expect(collection).not.toBeNull();
@@ -221,7 +243,8 @@ $(function() {
         it("loads a new feed and page heading updates and menu closes", function(done) {
             var oldHeading = $(".header-title").text();
 
-            // called once the loadFeed is triggered
+            // called once the feed is loaded
+            // tests if the header before and after the feed load is different
             var onFeedLoaded = function(done) {
                 return function() {
                     var newHeading = $(".header-title").text();
@@ -238,6 +261,11 @@ $(function() {
             };
 
             // called once the menu is visible
+            // tests if the menu is hidden once a feed is clicked
+            // uses doubly-nested callback function so that it can test
+            // the following separate async operations at once:
+            //  1. menu close transition animation
+            //  2. load feed
             var onMenuVisible = function(done) {
                 return function() {
                     var lastFeed = $(".feed-list").children().last().find("a");
@@ -247,6 +275,7 @@ $(function() {
                 };
             };
 
+            // show menu
             if (isMenuHidden()) {
                 menu.on(transitionEndEvents, testIfMenuVisibleAfterTransition(onMenuVisible(done)));
                 showMenu();

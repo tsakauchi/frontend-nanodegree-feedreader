@@ -7,6 +7,14 @@ module.exports = function(grunt) {
 
   // Grunt configuration
   grunt.initConfig({
+    copy: {
+      main: {
+        expand: true,
+        cwd: 'src/fonts/',
+        src: '**',
+        dest: 'dist/fonts/'
+      }
+    },
     bowercopy: {
       options: {
         srcPrefix: 'bower_components'
@@ -20,9 +28,58 @@ module.exports = function(grunt) {
           'jasmine-jquery.js': 'jasmine-jquery/lib/jasmine-jquery.js'
         }
       }
+    },
+    htmlmin: {
+      target: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'src/',
+            src: ['**/*.html'],
+            dest: 'dist/',
+            ext: '.html'
+          }
+        ]
+      }
+    },
+    cssmin: {
+      options: {
+        roundingPrecision: 2
+      },
+      target: {
+        files: [
+          {
+            expand: true,
+            cwd: 'src/',
+            src: ['**/*.css'],
+            dest: 'dist/',
+            ext: '.css'
+          }
+        ]
+      }
+    },
+    uglify: {
+      options: {
+        mangle: true
+      },
+      target: {
+        files: [
+          {
+            expand: true,
+            cwd: 'src/',
+            src: ['**/*.js'],
+            dest: 'dist/',
+            ext: '.js'
+          }
+        ]
+      }
     }
   });
 
   // Register default tasks
-  grunt.registerTask('default', ['bowercopy']);
+  grunt.registerTask('default', ['copy','bowercopy','newer:htmlmin','newer:cssmin','newer:uglify']);
 };

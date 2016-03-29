@@ -5,7 +5,7 @@ This repository contains a website for Frontend Nanodegree Project 6 Feedreader.
 This project contains a sample webapp that displays RSS feeds from multiple sources. The project is about testing this webapp using the Jasmine testing framework. Running the webapp will automatically run Jasmine, causing its output to show at the bottom of the page.
 
 ## How do I run this project?
-Per project requirement, the project ships with "dist" directory that contains the distributable version of the web app. To run the app, simply open dist/index.html with Chrome (or equivalent browser).
+Per project requirement, the project ships with "dist" directory that contains the distributable version of the web app. To run the app, simply open dist/index.html with Chrome (or equivalent browser). Alternatively, you can visit the [GitHub project page for this project](http://tsakauchi.github.io/frontend-nanodegree-feedreader/).
 
 Alternatively, you can build the project by following the steps below:
 1. Check this project out from GitHub.
